@@ -8,6 +8,22 @@
 #
 #-------------------------------------------------App Server----------------------------------
 # Define server logic required to draw a histogram
+library(viridis)
+library(dplyr)
+library(tibble)
+library(tidyverse)
+library(shinythemes)
+library(sf)
+library(XML)
+library(RCurl)
+library(tmap)
+library(rgdal)
+library(leaflet)
+library(shiny)
+library(shinythemes)
+library(plotly)
+library(ggplot2)
+#load('../output/covid-19.RData')
 shinyServer(function(input, output) {
 
 #----------------------------------------

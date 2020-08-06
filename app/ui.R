@@ -7,6 +7,22 @@
 #    http://shiny.rstudio.com/
 #
 # Define UI for application that draws a histogram
+library(viridis)
+library(dplyr)
+library(tibble)
+library(tidyverse)
+library(shinythemes)
+library(sf)
+library(XML)
+library(RCurl)
+library(tmap)
+library(rgdal)
+library(leaflet)
+library(shiny)
+library(shinythemes)
+library(plotly)
+library(ggplot2)
+#load('../output/covid-19.RData')
 shinyUI(navbarPage(title = 'COVID-19',
                    fluid = TRUE,
                    collapsible = TRUE,
