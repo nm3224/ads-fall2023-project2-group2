@@ -1,4 +1,4 @@
-### GR5243/GU4243 Spring 2020 Applied Data Science
+### GR5243/GU4243 Fall 2020 Applied Data Science
 ### Project 2 Shiny App Development
 ### --- App Development for under-explored data
 
@@ -125,9 +125,12 @@ Examples
 - [postGIS](http://rpubs.com/dgolicher/6373) process and visualize spatial data
 - [leaflet](https://rstudio.github.io/leaflet/shiny.html) interactive spatial visualization.
 - [Geo Visualization using ggplot and ggmap](https://journal.r-project.org/archive/2013-1/kahle-wickham.pdf)
-- [Build your own Shiny server on AWS](https://www.r-bloggers.com/installing-rstudio-shiny-server-on-aws/) [[Amazon Machine Image](http://www.louisaslett.com/RStudio_AMI/)]
+- [Build your own Shiny server on AWS](https://www.r-bloggers.com/installing-rstudio-shiny-server-on-aws/)
+- [Amazon Machine Image](http://www.louisaslett.com/RStudio_AMI/)]
+- [Geocomputation with R](https://bookdown.org/robinlovelace/geocompr/)
 
 #### Paper to read
 <ul>
 <li><a href="http://www.stat.columbia.edu/~gelman/research/published/vis14.pdf" target="_blank">Infovis and Statistical Graphics</a> (Gelman and Unwin)</li>
 </ul>
+
