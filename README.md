@@ -1,4 +1,4 @@
-# Project 2: Shiny App Development Version 3.0
+# Project 2: [Shiny App](https://jacobdingyifang.shinyapps.io/covid-19/) Development Version 3.0
 
 ### [Project Description](doc/project2_desc.md)
 
