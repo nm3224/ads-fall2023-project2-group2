@@ -21,11 +21,6 @@ if (!require("sf")) {
   install.packages("sf")
   library(sf)
 }
-
-if (!require("XML")) {
-  install.packages("XML", type = "binary")
-  library(XML)
-}
 if (!require("RCurl")) {
   install.packages("RCurl")
   library(RCurl)
@@ -63,26 +58,20 @@ if (!require("viridis")) {
   library(viridis)
 }
 #--------------------------------------------------------------------
-###############################Data Preparation#######################
-#Data Sources
-"Dong E, Du H, Gardner L. An interactive web-based dashboard to track COVID-19 in real time. 
-Lancet Inf Dis. 20(5):533-534. doi: 10.1016/S1473-3099(20)30120-1"
-#get the daily global cases data from API
-Cases_URL <- getURL("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
-global_cases <- read.csv(text = Cases_URL)
-
-#get the daily global deaths data from API
-Death_URL <- getURL("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
-global_death <- read.csv(text = Death_URL)
-
+###############################Define Functions#######################
 data_cooker <- function(df){
   #input dataframe and change the Country/Region column into standard format
   df$Country.Region <- as.character(df$Country.Region)
-  df$Country.Region[df$Country.Region == "Congo (Kinshasa)"] <- "Congo"
+  df$Country.Region[df$Country.Region == "Congo (Kinshasa)"] <- "Dem. Rep. Congo"
+  df$Country.Region[df$Country.Region == "Congo (Brazzaville)"] <- "Congo"
+  df$Country.Region[df$Country.Region == "Central African Republic"] <- "Central African Rep."
+  df$Country.Region[df$Country.Region == "Equatorial Guinea"] <- "Eq. Guinea"
   df$Country.Region[df$Country.Region == "Western Sahara"]<-"W. Sahara"
+  df$Country.Region[df$Country.Region == "Eswatini"] <- "eSwatini"
   df$Country.Region[df$Country.Region == "Taiwan*"] <- "Taiwan"
   df$Country.Region[df$Country.Region== "Cote d'Ivoire"] <-"Côte d'Ivoire"
   df$Country.Region[df$Country.Region == "Korea, South"] <- "South Korea"
+  df$Country.Region[df$Country.Region == "Bosnia and Herzegovina"] <- "Bosnia and Herz."
   df$Country.Region[df$Country.Region == "US"] <- "United States of America"
   df$Country.Region[df$Country.Region == "Burma"]<-"Myanmar"
   df$Country.Region[df$Country.Region == "Holy See"]<-"Vatican"
@@ -114,6 +103,19 @@ data_transformer <- function(df) {
   colnames(aggre_df) <- date_choices
   return(aggre_df)
 }
+#--------------------------------------------------------------------
+###############################Data Preparation#######################
+#Data Sources
+"Dong E, Du H, Gardner L. An interactive web-based dashboard to track COVID-19 in real time. 
+Lancet Inf Dis. 20(5):533-534. doi: 10.1016/S1473-3099(20)30120-1"
+#get the daily global cases data from API
+Cases_URL <- getURL("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+global_cases <- read.csv(text = Cases_URL)
+
+#get the daily global deaths data from API
+Death_URL <- getURL("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
+global_death <- read.csv(text = Death_URL)
+
 
 #get aggregate cases 
 aggre_cases <- as.data.frame(data_transformer(global_cases))
@@ -124,7 +126,7 @@ date_choices <- as.Date(colnames(aggre_cases),format = '%Y-%m-%d')
 #define country_names
 country_names_choices <- rownames(aggre_cases)
 
-
+#Download the spatial polygons dataframe in this link
 # https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/
 
 #countries <- readOGR(dsn ="../data/ne_50m_admin_0_countries",

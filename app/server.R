@@ -7,14 +7,12 @@
 #    http://shiny.rstudio.com/
 #
 #-------------------------------------------------App Server----------------------------------
-# Define server logic required to draw a histogram
 library(viridis)
 library(dplyr)
 library(tibble)
 library(tidyverse)
 library(shinythemes)
 library(sf)
-library(XML)
 library(RCurl)
 library(tmap)
 library(rgdal)
@@ -23,9 +21,10 @@ library(shiny)
 library(shinythemes)
 library(plotly)
 library(ggplot2)
+#can run RData directly to get the necessary date for the app
+#global.r will enable us to get new data everyday
 #load('../output/covid-19.RData')
 shinyServer(function(input, output) {
-
 #----------------------------------------
 #tab panel 1 - Home Plots
 #preapare data for plot
@@ -95,7 +94,7 @@ pal <- reactive(colorNumeric(c("#FFFFFFFF" ,rev(inferno(256))), domain = c(0,log
 output$map <- renderLeaflet({
     map <-  leaflet(countries) %>%
         addProviderTiles("Stadia.Outdoors", options = providerTileOptions(noWrap = TRUE)) %>%
-        setView(0, 30, zoom = 3)})
+        setView(0, 30, zoom = 3) })
 
 
 observe({
