@@ -1,6 +1,7 @@
 # Project 2: Shiny App Development Version 3.0
 
 ### [Project Description](doc/project2_desc.md)
+### [Covid-Tracker](https://jacobdingyifang.shinyapps.io/covid-19/)
 
 ![screenshot](doc/map.jpg)
 
