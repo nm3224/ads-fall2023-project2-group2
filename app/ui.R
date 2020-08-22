@@ -21,7 +21,7 @@ library(shiny)
 library(shinythemes)
 library(plotly)
 library(ggplot2)
-#load('../output/covid-19.RData')
+load('./output/covid-19.RData')
 shinyUI(navbarPage(title = 'COVID-19',
                    fluid = TRUE,
                    collapsible = TRUE,

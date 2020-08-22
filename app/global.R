@@ -134,7 +134,7 @@ country_names_choices <- rownames(aggre_cases)
 #                     encoding = "utf-8",use_iconv = T,
 #                     verbose = FALSE)
 #save(countries, file="countries_shapeFile.RData")
-load("../output/countries_shapeFile.RData")
+load("./output/countries_shapeFile.RData")
 
 #make a copy of aggre_cases dataframe
 aggre_cases_copy <- as.data.frame(aggre_cases)
@@ -145,3 +145,5 @@ aggre_death_copy <- as.data.frame(aggre_death)
 aggre_death_copy$country_names <- as.character(rownames(aggre_death_copy))
 
 binning<- function(x) {10^(ceiling(log10(x)))}
+
+save.image(file='./output/covid-19.RData')
