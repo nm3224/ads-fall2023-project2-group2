@@ -24,7 +24,7 @@ library(ggplot2)
 #can run RData directly to get the necessary date for the app
 #global.r will enable us to get new data everyday
 #update data with automated script
-source("global.R") # run locally to update numbers, but not live on Rstudio server (to avoid possible errors on auto-updates)
+source("global.R") # run to update the number of cases
 load('./covid-19.RData')
 shinyServer(function(input, output) {
 #----------------------------------------
