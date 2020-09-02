@@ -3,7 +3,7 @@
 # run the application by clicking 'Run App' above.
 #
 # Find out more about building applications with Shiny here:
-#
+#ag
 #    http://shiny.rstudio.com/
 #
 # Define UI for application that draws a histogram
@@ -21,7 +21,7 @@ library(shiny)
 library(shinythemes)
 library(plotly)
 library(ggplot2)
-load('./covid-19.RData')
+#load('./output/covid-19.RData')
 shinyUI(navbarPage(title = 'COVID-19',
                    fluid = TRUE,
                    collapsible = TRUE,

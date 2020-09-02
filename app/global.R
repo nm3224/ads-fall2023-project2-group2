@@ -129,7 +129,7 @@ country_names_choices <- rownames(aggre_cases)
 #Download the spatial polygons dataframe in this link
 # https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/
 
-output_shapefile_filepath <- "../output/countries_shapeFile.RData"
+output_shapefile_filepath <- "./output/countries_shapeFile.RData"
 
 #if already has countries_shapeFile.RData under output folder, no need to process it again
 #otherwise, read files from data folder to create countries_shapeFile.RData under output folder
@@ -155,4 +155,4 @@ aggre_death_copy$country_names <- as.character(rownames(aggre_death_copy))
 binning<- function(x) {10^(ceiling(log10(x)))}
 
 #use save.image() at any time to save all environment data into an .RData file
-save.image(file='./covid-19.RData')
+save.image(file='./output/covid-19.RData')
