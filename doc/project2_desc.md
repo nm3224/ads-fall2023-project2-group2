@@ -64,10 +64,9 @@ Blogs
 - [50 years of crimes in US](https://public.tableau.com/en-us/s/gallery/50-years-crime-us) an interactive visualization of crime trends. 
 - [The fallen of World War II](http://www.fallen.io/ww2/) a visualization to put the impact of World War II in numbers.
 - [200 Years of U.S. Immigration](http://insightfulinteraction.com/immigration200years.html) a visualization that clearly demonstrated the effects of the 1924 immigration act. 
-- [311 sanitation complaints](http://www.spatialinformationdesignlab.org/projects/civic-data-management-311-sanitation-complaints)
 - [250 years of buildings from Manhattan](http://www.gislounge.com/mapping-almost-250-years-buildings-manhattan/)
-- [spatial.ly](http://spatial.ly/blog/) Website of Dr. James Cheshire, a geographer on spatial visualizations that tell stories.
-- [NYC taxi data](http://www.andresmh.com/nyctaxitrips/), some [exploration](http://hafen.github.io/taxi/#initial-exploration), a cool [visualization](http://nyctaxi.herokuapp.com/).
+- [spatial.ly](https://spatial.ly/category/r-spatial-data-hints/) Website of Dr. James Cheshire, a geographer on spatial visualizations that tell stories.
+- [NYC taxi data](http://www.andresmh.com/nyctaxitrips/), some [exploration](http://hafen.github.io/taxi/#initial-exploration), a cool [visualization](http://nyc-taxi-trips.herokuapp.com/index).
 - [Winners of New York City Tree Counts DataJam](http://treescountdatajam.devpost.com/updates/5503-and-the-winners-are)
 - [Vision Zero Interactive Map](http://www.nycvzv.info/)
 - [Wind Map](http://hint.fm/wind/)
@@ -81,7 +80,7 @@ News articles:
 
 Examples
 <ul>
-<li><a href="http://www.r-graph-gallery.com/portfolio/interactive-r-graphics/" target="_blank">Interactive graphics </a>from <a href="http://www.r-graph-gallery.com/" target="_blank">R Graph Gallery</a></li>
+<li><a href="https://www.r-graph-gallery.com/interactive-charts.html" target="_blank">Interactive graphics </a>from <a href="http://www.r-graph-gallery.com/" target="_blank">R Graph Gallery</a></li>
 <li><a href="http://moderndata.plot.ly/15-python-and-r-charts-with-interactive-controls-buttons-dropdowns-and-sliders/ " target="_blank"> Plotly: 15 interactive charts with sliders, dropdowns, and buttons </a></li>
 </ul>
 
