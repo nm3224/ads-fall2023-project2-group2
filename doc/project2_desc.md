@@ -68,10 +68,6 @@ Blogs
 - [spatial.ly](https://spatial.ly/category/r-spatial-data-hints/) Website of Dr. James Cheshire, a geographer on spatial visualizations that tell stories.
 - [NYC taxi data](http://www.andresmh.com/nyctaxitrips/), some [exploration](http://hafen.github.io/taxi/#initial-exploration), a cool [visualization](http://nyc-taxi-trips.herokuapp.com/index).
 - [Winners of New York City Tree Counts DataJam](http://treescountdatajam.devpost.com/updates/5503-and-the-winners-are)
-- [Vision Zero Interactive Map](http://www.nycvzv.info/)
-- [Wind Map](http://hint.fm/wind/)
-- [Top 100 R resources on COVID-19](https://towardsdatascience.com/top-5-r-resources-on-covid-19-coronavirus-1d4c8df6d85f)
-- [COVID-19 Tracker](https://shiny.rstudio.com/gallery/covid19-tracker.html)
 
 News articles:
 <ul>
@@ -81,10 +77,13 @@ News articles:
 </ul><a href="https://medium.com/@dqn/what-i-use-for-data-driven-journalism-4333364db944#.12xqj44g8" target="_blank"></a>
 
 Examples
-<ul>
-<li><a href="https://www.r-graph-gallery.com/interactive-charts.html" target="_blank">Interactive graphics </a>from <a href="http://www.r-graph-gallery.com/" target="_blank">R Graph Gallery</a></li>
-<li><a href="http://moderndata.plot.ly/15-python-and-r-charts-with-interactive-controls-buttons-dropdowns-and-sliders/ " target="_blank"> Plotly: 15 interactive charts with sliders, dropdowns, and buttons </a></li>
-</ul>
+- [Interactive graphics](https://www.r-graph-gallery.com/interactive-charts.html) from [R Graph Gallery](http://www.r-graph-gallery.com/)
+- [Plotly: 15 interactive charts with sliders, dropdowns, and buttons](http://moderndata.plot.ly/15-python-and-r-charts-with-interactive-controls-buttons-dropdowns-and-sliders)
+- [Vision Zero Interactive Map](http://www.nycvzv.info/)
+- [Wind Map](http://hint.fm/wind/)
+- [Top 100 R resources on COVID-19](https://towardsdatascience.com/top-5-r-resources-on-covid-19-coronavirus-1d4c8df6d85f)
+- [COVID-19 Tracker](https://shiny.rstudio.com/gallery/covid19-tracker.html)
+
 
 #### A small set of potential tools 
 
