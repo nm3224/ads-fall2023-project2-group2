@@ -70,6 +70,8 @@ Blogs
 - [Winners of New York City Tree Counts DataJam](http://treescountdatajam.devpost.com/updates/5503-and-the-winners-are)
 - [Vision Zero Interactive Map](http://www.nycvzv.info/)
 - [Wind Map](http://hint.fm/wind/)
+- [Top 100 R resources on COVID-19](https://towardsdatascience.com/top-5-r-resources-on-covid-19-coronavirus-1d4c8df6d85f)
+- [COVID-19 Tracker](https://shiny.rstudio.com/gallery/covid19-tracker.html)
 
 News articles:
 <ul>
