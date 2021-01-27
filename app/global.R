@@ -109,12 +109,12 @@ data_transformer <- function(df) {
 "Dong E, Du H, Gardner L. An interactive web-based dashboard to track COVID-19 in real time. 
 Lancet Inf Dis. 20(5):533-534. doi: 10.1016/S1473-3099(20)30120-1"
 #get the daily global cases data from API
-Cases_URL <- getURL("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
-global_cases <- read.csv(text = Cases_URL)
+Cases_URL <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
+global_cases <- read.csv(Cases_URL)
 
 #get the daily global deaths data from API
-Death_URL <- getURL("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
-global_death <- read.csv(text = Death_URL)
+Death_URL <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"
+global_death <- read.csv(Death_URL)
 
 
 #get aggregate cases 
