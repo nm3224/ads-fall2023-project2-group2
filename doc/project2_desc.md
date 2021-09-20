@@ -1,8 +1,10 @@
-### GR5243/GU4243 Spring 2021 Applied Data Science
+### GR5243/GU4243 Fall 2021 Applied Data Science
 ### Project 2 Shiny App Development
 ### --- App Development for under-explored topic on COVID-19 data
 
-In this project, working in teams, you will create a `R` shiny app for exploring and visualizing a previously *under-explored* topic about COVID-19 in New York City or United States using [NYC Coronavirus Disease 2019 Data](https://github.com/nychealth/coronavirus-data) or [JHU CSSE Covid-19 Data](https://github.com/CSSEGISandData/COVID-19). 
+The COVID-19 pandemic has greatly influced NYC in many ways, from transportation, to public health, to schools and restaurants. Over the past 20 months, the city went through lock down, reopen, a second wave, quick rollout of vaccinations, and now a uncertain flu season. How these up's and down's impacted NYC? Have there been changes in policies and operations? How the pandemic changed different neighborhoods differently? 
+
+In this project, working in teams, you will create a `R` shiny app for exploring and visualizing the work or programs of a NYC agency during the COVID pandemic. NYC's [Major's Management Report](https://www1.nyc.gov/assets/operations/downloads/pdf/mmr2021/2021_mmr.pdf) provides a comprehensive overview of New York City various departments and agencies that serve the city. 
 
 ### Challenge
 
