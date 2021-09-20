@@ -4,11 +4,12 @@
 
 The COVID-19 pandemic has greatly influced NYC in many ways, from transportation, to public health, to schools and restaurants. Over the past 20 months, the city went through lock down, reopen, a second wave, quick rollout of vaccinations, and now a uncertain flu season. How these up's and down's impacted NYC? Have there been changes in policies and operations? How the pandemic changed different neighborhoods differently? 
 
-In this project, working in teams, you will create a `R` shiny app for exploring and visualizing the work or programs of a NYC agency during the COVID pandemic. NYC's [Major's Management Report](https://www1.nyc.gov/assets/operations/downloads/pdf/mmr2021/2021_mmr.pdf) provides a comprehensive overview of New York City various departments and agencies that serve the city. 
 
 ### Challenge
 
-For this project, we invite you to explore COVID-19 data sets from [JHU CSSE Covid-19 Data](https://github.com/CSSEGISandData/COVID-19) or NYC Health open data released on the [NYC Coronavirus Disease 2019 Data](https://github.com/nychealth/coronavirus-data) website. Your team should choose a topic that interests you. Your **challenge** is develop a shiny app for a previously under-explored topic. 
+For this project, we invite you to develop an *Exploratory Data Analysis and Visualization* shiny app on the work of a **NYC government agency/program** of your choice using NYC open data released on the [NYC Open Data By Agency](https://opendata.cityofnewyork.us/data/) website. In particular, many agencies have adjusted their work or rolled out new programs due to COVID, your app should provide ways for a user to explore quantiative measures of how covid has impacted daily life in NYC from different prospectives. 
+
+In this project, working in teams, you will create a `R` shiny app for exploring and visualizing the work or programs of a NYC agency during the COVID pandemic. NYC's [Major's Management Report](https://www1.nyc.gov/assets/operations/downloads/pdf/mmr2021/2021_mmr.pdf) provides a comprehensive overview of New York City various departments and agencies that serve the city. 
 
 For presentation, the team should present their **shiny app** as a *product demo*, supported by interesting findings that are visualized by this app. Teams can also share technical challenges and their creative solutions. All shiny apps are required to be deployed (either on <http://www.shinyapps.io/> or your own Shiny server).
 
@@ -27,7 +28,7 @@ Each week, we will give a tutorial in class and having live discussion and brain
 	* can it be used to answer questions or exploring for interesting trends?
 + Implementation of the app 
 	+ are the data processed/integrated properly?
-	+ are necessary measures taken into account for data 	collection issues such as biases, missing values, etc?
+	+ are necessary measures taken into account for data collection issues such as biases, missing values, etc?
 + Visualization
 	+ Is the information visualized clearly?
 	+ Is the visualization easy to understand?
@@ -38,9 +39,9 @@ Each week, we will give a tutorial in class and having live discussion and brain
 *(More details will be posted as grading rubrics in courseoworks/canvas)*
 
 ### Suggested team workflow
-1. [wk1] Week 1 is the **studying & planning** week. Study previous apps done by ADS students, read project description, data description, browse data and brainstorm for ideas.
+1. [wk1] Week 1 is the **studying & planning** week. Read project description, the [Mayor's Management Report](https://www1.nyc.gov/assets/operations/downloads/pdf/mmr2021/2021_mmr.pdf), data description, browse data and brainstorm for ideas.
 2. [wk1] Each team is strongly recommended to demonstrate project progress by posting a project plan with task assignments, either in piazza or as issues on GitHub before week 2. 
-3. [wk1] As a team, study interesting data sets and previous ADS apps together (not necessarily face-to-face). During the discussion, discuss a number of key analyses/functionalities carefully and discuss possible design ideas.
+3. [wk1] As a team, study interesting data sets together (not necessarily face-to-face). During the discussion, discuss a number of key analyses/functionalities carefully and discuss possible design ideas.
      * "What information is of value or interesting?"
      * "Which analysis/visualization is particularly informative?" 
      * Good visualizations do not just look cool. They should be easy to understand and give the correct impression about data. 
@@ -57,7 +58,7 @@ Each week, we will give a tutorial in class and having live discussion and brain
 - Learn to work together is an important learning goal of this course.   
 
 ### Resources
-Here the examples are for inspiration. The order is abitrary. We do not endorse any of these analyses to be a model analysis for you to follow. The tools included are those We think might be useful. Please feel free to send me *stories* and/or *tools* that you would like to contribute to this list. 
+Here are some examples for inspiration. The order is abitrary. We do not endorse any of these analyses to be a model analysis for you to follow. The tools included are those We think might be useful. Please feel free to send me *stories* and/or *tools* that you would like to contribute to this list. 
 
 #### Stories
 
