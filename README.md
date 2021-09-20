@@ -9,7 +9,6 @@ In this second project of GR5243 Applied Data Science, we develop a *Exploratory
 The **learning goals** for this project is:
 
 - business intelligence for data science
-- study legacy codes and further development
 - data cleaning
 - data visualization
 - systems development/design life cycle
