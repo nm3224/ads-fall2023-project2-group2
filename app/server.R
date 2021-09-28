@@ -49,8 +49,8 @@ citi_bike_station_info <- total_citi_bike_df[,c('station_id','station_name','sta
 citi_bike_station_info <- citi_bike_station_info[!duplicated(citi_bike_station_info[ , c("station_id")]),]
 
 #split the bike data to pre-covid and covid time period
-citi_bike_pre_covid_df = total_citi_bike_df[total_citi_bike_df$date <= "2019-05-31",]
-citi_bike_covid_df = total_citi_bike_df[total_citi_bike_df$date >= "2020-04-30",]
+citi_bike_pre_covid_df = total_citi_bike_df[difftime(total_citi_bike_df$date,"2019-05-31")<=0,] #2019-05-01 ~ 2019-05-31
+citi_bike_covid_df = total_citi_bike_df[difftime(total_citi_bike_df$date,"2020-04-30")>=0,] #2020-05-01 ~ 2021-05-31
 
 
 # Define server logic required to draw a histogram
