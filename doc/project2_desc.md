@@ -1,12 +1,10 @@
-### GR5243/GU4243 Spring 2021 Applied Data Science
+### GR5243/GU4243 Fall 2023 Applied Data Science
 ### Project 2 Shiny App Development
-### --- App Development for under-explored topic on COVID-19 data
-
-In this project, working in teams, you will create a `R` shiny app for exploring and visualizing a previously *under-explored* topic about COVID-19 in New York City or United States using [NYC Coronavirus Disease 2019 Data](https://github.com/nychealth/coronavirus-data) or [JHU CSSE Covid-19 Data](https://github.com/CSSEGISandData/COVID-19). 
+### --- App Development using OpenFEMA data
 
 ### Challenge
 
-For this project, we invite you to explore COVID-19 data sets from [JHU CSSE Covid-19 Data](https://github.com/CSSEGISandData/COVID-19) or NYC Health open data released on the [NYC Coronavirus Disease 2019 Data](https://github.com/nychealth/coronavirus-data) website. Your team should choose a topic that interests you. Your **challenge** is develop a shiny app for a previously under-explored topic. 
+Since 1979, the Federal Emergency Management Agency (FEMA) has been the Federal Government’s lead agency in responding to and recovering from many of the Nation’s greatest moments of crisis. For this project, we invite you to develop an *Exploratory Data Analysis and Visualization* shiny app using one of [**the OpenFEMA Data Sets**](https://www.fema.gov/about/openfema/data-sets) of your choice. Working in teams, you will create the app for exploring and visualizing the data. The design of the visualization tool should be well motivated by the subject area of your choice.
 
 For presentation, the team should present their **shiny app** as a *product demo*, supported by interesting findings that are visualized by this app. Teams can also share technical challenges and their creative solutions. All shiny apps are required to be deployed (either on <http://www.shinyapps.io/> or your own Shiny server).
 
@@ -25,7 +23,7 @@ Each week, we will give a tutorial in class and having live discussion and brain
 	* can it be used to answer questions or exploring for interesting trends?
 + Implementation of the app 
 	+ are the data processed/integrated properly?
-	+ are necessary measures taken into account for data 	collection issues such as biases, missing values, etc?
+	+ are necessary measures taken into account for data collection issues such as biases, missing values, etc?
 + Visualization
 	+ Is the information visualized clearly?
 	+ Is the visualization easy to understand?
@@ -36,9 +34,9 @@ Each week, we will give a tutorial in class and having live discussion and brain
 *(More details will be posted as grading rubrics in courseoworks/canvas)*
 
 ### Suggested team workflow
-1. [wk1] Week 1 is the **studying & planning** week. Study previous apps done by ADS students, read project description, data description, browse data and brainstorm for ideas.
+1. [wk1] Week 1 is the **studying & planning** week. Read project description, data description, browse data and brainstorm for ideas.
 2. [wk1] Each team is strongly recommended to demonstrate project progress by posting a project plan with task assignments, either in piazza or as issues on GitHub before week 2. 
-3. [wk1] As a team, study interesting data sets and previous ADS apps together (not necessarily face-to-face). During the discussion, discuss a number of key analyses/functionalities carefully and discuss possible design ideas.
+3. [wk1] As a team, study interesting data sets together (not necessarily face-to-face). During the discussion, discuss a number of key analyses/functionalities carefully and discuss possible design ideas.
      * "What information is of value or interesting?"
      * "Which analysis/visualization is particularly informative?" 
      * Good visualizations do not just look cool. They should be easy to understand and give the correct impression about data. 
@@ -55,7 +53,7 @@ Each week, we will give a tutorial in class and having live discussion and brain
 - Learn to work together is an important learning goal of this course.   
 
 ### Resources
-Here the examples are for inspiration. The order is abitrary. We do not endorse any of these analyses to be a model analysis for you to follow. The tools included are those We think might be useful. Please feel free to send me *stories* and/or *tools* that you would like to contribute to this list. 
+Here are some examples for inspiration. The order is abitrary. We do not endorse any of these analyses to be a model analysis for you to follow. The tools included are those We think might be useful. Please feel free to send me *stories* and/or *tools* that you would like to contribute to this list. 
 
 #### Stories
 
