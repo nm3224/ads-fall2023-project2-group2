@@ -4,26 +4,43 @@ output: html_document
 date: "2023-09-30"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+Make sure to install all packages below before running any code; I installed them by running: 
+```{r}
+# install.packages('package') for each package listed.
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+Set ur directory. I set mine running this in the console:
+```{r}
+#setwd('Desktop/GitHub/ads-fall2023-project2-group2/doc/')
 ```
 
-## Including Plots
+Load libraries
+```{r load_libraries, warning=FALSE, include=FALSE, echo=FALSE}
+library(word2vec)
+library(uwot)
+library(tidytext)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+library(tm)
+library(wordcloud)
+library(udpipe)
 
-You can also embed plots, for example:
+#for sentiment analysis  
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+library(syuzhet)
+library(lubridate)
+library(scales)
+library(reshape2)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Read in data
+```{r}
+pathfile <- '../data/WeatherNYC.csv'
+weather_data <- read.csv(pathfile)
+
+pathfile_2 <- '../data/citibike_data.csv'
+citibike_data <- read.csv(pathfile_2)
+```
+
