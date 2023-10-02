@@ -21,9 +21,9 @@ The **learning goals** for this project is:
 ## Project Title Lorem ipsum dolor sit amet
 Term: Fall 2023
 
-+ Team #
++ Team #2
 + **Projec title**: + Team members
-	+ team member 1
+	+ Julia Blake
 	+ team member 2
 	+ team member 3
 	+ team member 4
