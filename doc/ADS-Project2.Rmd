@@ -1,0 +1,205 @@
+---
+title: "ADS-Project2"
+author: "Jingxuan Wang"
+date: "2023-10-01"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(dplyr)
+library(shiny)
+library(lubridate)
+library(ggplot2)
+library(plotly)
+library(RColorBrewer)
+library(DT)
+library(data.table)
+```
+
+
+
+```{r collapse=TRUE}
+#Data Pre-processing
+disaster_declaration <- read.csv("C:\\Users\\wangj\\Desktop\\ADS-Project2\\FemaWebDisasterDeclarations.csv")
+disaster_declaration <- disaster_declaration[,-c(2,5,10:13,18:20)]
+disaster_declaration$incidentBeginDate <- as.POSIXct(disaster_declaration$incidentBeginDate, format = "%Y-%m-%dT%H:%M:%S.%OS")
+disaster_declaration$year <- year(disaster_declaration$incidentBeginDate)
+disaster_summary <- read.csv("C:\\Users\\wangj\\Desktop\\ADS-Project2\\FemaWebDisasterSummaries.csv")
+disaster_summary <- disaster_summary[,-c(9,10,12:14)]
+disaster_approved <- inner_join(disaster_declaration, disaster_summary, by = "disasterNumber")
+top_incident <- disaster_declaration%>%group_by(year, incidentType)%>%summarize(Frequency=n())%>%arrange(year, desc(Frequency))%>%slice_max(order_by = Frequency, n = 1)
+disaster_declaration_na <- colSums(is.na(disaster_declaration))
+disaster_summary_na <- colSums(is.na(disaster_summary))
+top_states <- disaster_declaration%>%group_by(year, stateName)%>%summarize(Frequency=n())%>%arrange(year, desc(Frequency))%>%slice_max(order_by = Frequency, n = 1)
+length(setdiff(disaster_declaration$disasterNumber,disaster_summary$disasterNumber))
+disaster_declaration[disaster_declaration$disasterNumber == "1213",]
+```
+
+
+
+```{r}
+ui <- fluidPage(
+  titlePanel("Disaster Frequency by Year"),
+
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons("year_selector", "Select Year Range or Single Year:",
+                   choices = c("Year Range" = "range", "Single Year" = "single"),
+                   selected = "range"),
+      uiOutput("yearInput")
+    ),
+
+    mainPanel(
+        tabsetPanel(
+          tabPanel("Disaster Declarations",
+            plotlyOutput("disasterPlot")
+          ),
+          tabPanel("Most Prevalent Disaster",
+            plotlyOutput("prevalent_incident")
+          )
+        ),
+        br(),
+        br(),
+      plotlyOutput("incidentPieChart")
+    )
+  )
+)
+
+server <- function(input, output) {
+  disaster_declaration <- read.csv("C:\\Users\\wangj\\Desktop\\ADS-Project2\\FemaWebDisasterDeclarations.csv")
+  disaster_declaration <- disaster_declaration[,-c(2,5,10:13,18:20)]
+  disaster_declaration$incidentBeginDate <- as.POSIXct(disaster_declaration$incidentBeginDate, format = "%Y-%m-%dT%H:%M:%S.%OS")
+  disaster_declaration$year <- year(disaster_declaration$incidentBeginDate)
+  disaster_frequency <- disaster_declaration %>%
+  group_by(year) %>%
+  summarize(Frequency = n())
+  
+  
+  output$yearInput <- renderUI({
+    if (input$year_selector == "range") {
+      sliderInput("year_range", "Select Year Range:",
+                  min = min(disaster_frequency$year),
+                  max = max(disaster_frequency$year),
+                  value = c(min(disaster_frequency$year), max(disaster_frequency$year)),
+                  step = 1)
+    } else {
+      selectInput("single_year", "Select Single Year:",
+                  choices = unique(disaster_frequency$year),
+                  selected = max(disaster_frequency$year))
+    }
+  })
+  values <- reactiveValues(selected_year = NULL)
+  output$disasterPlot <- renderPlotly({
+    filtered_data <- switch(
+      input$year_selector,
+      "range" = {
+        selected_year_range <- input$year_range
+        filter(disaster_frequency, year >=   selected_year_range[1] & year <= selected_year_range[2])
+      },
+      "single" = {
+        disaster_frequency$year <- as.character(disaster_frequency$year)
+        filter(disaster_frequency, year == as.character(input$single_year))
+      }
+    )
+   num_years <- length(unique(filtered_data$year))
+   bar_width <- ifelse(num_years > 4, 0.8, 0.2)
+   plot_ly(source = "disaster_freq", height = 400, width = 600)%>%
+        add_trace(data = filtered_data, 
+                  x = ~year, 
+                  y = ~Frequency, 
+                  type = "bar",
+                  marker = list(color = "#cab2d6"),
+                  width = bar_width )%>%
+        layout(title = "Disaster Frequency by Year",
+        yaxis = list(title = "Frequency"))%>%
+        event_register("plotly_click")
+  })
+
+  observeEvent(event_data(event ="plotly_click", source = "disaster_freq"),{
+    clicked <- event_data(event ="plotly_click", source = "disaster_freq")
+    if(!is.null(clicked)){
+      values$selected_year <- clicked$x
+    }
+  })
+    output$incidentPieChart <- renderPlotly({
+      validate(need(values$selected_year, message = "click on a bar to view incident breakdown"))
+      filtered_data <- disaster_declaration %>%
+        filter(year == values$selected_year) %>%
+        group_by(incidentType) %>%
+        summarize(Frequency = n())
+      palette <- brewer.pal(length(filtered_data$incidentType), "Set3")
+      plot_ly(height = 400, width = 600) %>%
+        add_trace(data = filtered_data,
+                  labels = ~incidentType,
+                  values = ~Frequency,
+                  type = "pie",
+                  marker = list(colors = palette)) %>%
+        layout(title = paste("Incident Frequency for Year", values$selected_year))
+    })
+
+    output$prevalent_incident <- renderPlotly({
+      filtered_data <- switch(
+      input$year_selector,
+      "range" = {
+        selected_year_range <- input$year_range
+        filter(top_incident, year >=   selected_year_range[1] & year <= selected_year_range[2])
+      },
+      "single" = {
+        top_incident$year <- as.character(top_incident$year)
+        filter(top_incident, year == as.character(input$single_year))
+      }
+    )
+      num_years <- length(unique(filtered_data$year))
+      bar_width <- ifelse(num_years > 4, 0.8, 0.2)
+      palette <- brewer.pal(n = n_distinct(top_incident$incidentType), name = "Set2")
+      plot_ly(data = filtered_data, height = 400, width = 600) %>%
+        add_trace(x = ~year, 
+                  y = ~Frequency, 
+                  type = "bar",
+                  color = ~incidentType, colors = palette,
+                  width = bar_width) %>%
+        layout(title = list(text = "Most Prevalent Disaster by Year"),
+                  yaxis = list(title = "Frequency"),
+                  legend = list(x = 0.05, y = 1, orientation = "h"))
+
+ })
+}
+
+shinyApp(ui, server)
+
+```
+
+```{r}
+registrations <- fread("C:\\Users\\wangj\\Desktop\\ADS-Project2\\IndividualsAndHouseholdsProgramValidRegistrations.csv")
+```
+
+```{r}
+#Check NA values
+colSums(is.na(registrations))
+```
+
+```{r}
+#Check structure of the dataframe
+registration_info <- str(registrations)
+#Drop Unnecessary Columns
+na_columns <- colnames(registrations)[apply(is.na(registrations), 2, any)]
+```
+
+```{r}
+na_columns
+registrations <- registrations[,-c("sbaEligible","foodNeed","shelterNeed","habitabilityRepairsRequired","lastRefresh","utilitiesOut")]
+#missing_percentages <- colMeans(is.na(registrations)) * 100
+#missing_info <- data.frame(Column = names(registrations), Missing_Percentage = missing_percentages)
+#print(missing_info)
+registrations <- na.omit(registrations)
+dim(registrations)
+```
+```{r}
+#str(registrations)
+min(registrations$declarationDate)
+str(registrations)
+```
+
