@@ -35,7 +35,6 @@ disaster_declaration_na <- colSums(is.na(disaster_declaration))
 disaster_summary_na <- colSums(is.na(disaster_summary))
 top_states <- disaster_declaration%>%group_by(year, stateName)%>%summarize(Frequency=n())%>%arrange(year, desc(Frequency))%>%slice_max(order_by = Frequency, n = 1)
 length(setdiff(disaster_declaration$disasterNumber,disaster_summary$disasterNumber))
-disaster_declaration[disaster_declaration$disasterNumber == "1213",]
 ```
 
 
@@ -170,36 +169,5 @@ server <- function(input, output) {
 
 shinyApp(ui, server)
 
-```
-
-```{r}
-registrations <- fread("C:\\Users\\wangj\\Desktop\\ADS-Project2\\IndividualsAndHouseholdsProgramValidRegistrations.csv")
-```
-
-```{r}
-#Check NA values
-colSums(is.na(registrations))
-```
-
-```{r}
-#Check structure of the dataframe
-registration_info <- str(registrations)
-#Drop Unnecessary Columns
-na_columns <- colnames(registrations)[apply(is.na(registrations), 2, any)]
-```
-
-```{r}
-na_columns
-registrations <- registrations[,-c("sbaEligible","foodNeed","shelterNeed","habitabilityRepairsRequired","lastRefresh","utilitiesOut")]
-#missing_percentages <- colMeans(is.na(registrations)) * 100
-#missing_info <- data.frame(Column = names(registrations), Missing_Percentage = missing_percentages)
-#print(missing_info)
-registrations <- na.omit(registrations)
-dim(registrations)
-```
-```{r}
-#str(registrations)
-min(registrations$declarationDate)
-str(registrations)
 ```
 
