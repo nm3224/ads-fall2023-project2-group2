@@ -24,7 +24,7 @@ Term: Fall 2023
 + Team #2
 + **Projec title**: + Team members
 	+ Julia Blake
-	+ team member 2
+	+ Noreen Mayat
 	+ team member 3
 	+ team member 4
 	+ team member 5
