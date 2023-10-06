@@ -26,7 +26,7 @@ Term: Fall 2023
 	+ Julia Blake
 	+ Noreen Mayat
 	+ Yucheng Lu
-	+ team member 4
+	+ Arnulfo Trevino
 	+ team member 5
  	+ team member 6
 
