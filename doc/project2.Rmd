@@ -41,7 +41,32 @@ x3 <- sum(owner_data$approvedBetween25001AndMax)
 ```
 
 ```{r}
+jpeg(filename="figs/owners_pie_chart.jpg",width=480,height=480)
+slices <- c(x1, x2, x3)
+lbls <- c("1-10000", "10001-25000", "25001-Max")
+pie(slices, labels = lbls, col=rainbow(length(lbls)), main="Pie Chart for Owners Approved Amounts")
+dev.off()
+```
 
+```{r}
+y1 <- sum(renter_data$approvedBetween1And10000)
+y2 <- sum(renter_data$approvedBetween10001And25000)
+y3 <- sum(renter_data$approvedBetween25001AndMax)
+```
+
+```{r}
+jpeg(filename="figs/renters_pie_chart.jpg",width=480,height=480)
+slices <- c(y1, y2, y3)
+lbls <- c("1-10000", "10001-25000", "25001-Max")
+pie(slices, labels = lbls, col=rainbow(length(lbls)), main="Pie Chart for Renters Approved Amounts")
+dev.off()
+```
+
+
+```{r}
+slices <- c(x1, x2, x3)
+lbls <- c("1-10000", "10001-25000", "25001-Max")
+pie(slices, labels = lbls, col=rainbow(length(lbls)), main="Pie Chart for Owners Approved Amounts")
 ```
 
 
