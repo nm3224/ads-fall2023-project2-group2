@@ -22,6 +22,7 @@ library(ggplot2)
 library(ggrepel)
 library(udpipe)
 library(plotly)
+library(plyr)
 ```
 
 Read in data
@@ -33,12 +34,14 @@ pathfile_2 <- '../data/HousingAssistanceRenters.csv'
 renter_data <- read.csv(pathfile_2)
 ```
 
+
 ```{r}
 # calculate sum of each 
 x1 <- sum(owner_data$approvedBetween1And10000)
 x2 <- sum(owner_data$approvedBetween10001And25000)
 x3 <- sum(owner_data$approvedBetween25001AndMax)
 ```
+
 
 ```{r}
 jpeg(filename="figs/owners_pie_chart.jpg",width=480,height=480)
@@ -48,11 +51,13 @@ pie(slices, labels = lbls, col=rainbow(length(lbls)), main="Pie Chart for Owners
 dev.off()
 ```
 
+
 ```{r}
 y1 <- sum(renter_data$approvedBetween1And10000)
 y2 <- sum(renter_data$approvedBetween10001And25000)
 y3 <- sum(renter_data$approvedBetween25001AndMax)
 ```
+
 
 ```{r}
 jpeg(filename="figs/renters_pie_chart.jpg",width=480,height=480)
@@ -67,6 +72,14 @@ dev.off()
 slices <- c(x1, x2, x3)
 lbls <- c("1-10000", "10001-25000", "25001-Max")
 pie(slices, labels = lbls, col=rainbow(length(lbls)), main="Pie Chart for Owners Approved Amounts")
+```
+
+
+```{r}
+#calculating empirical distribution of total damge/total approved amount based on state
+owner_data.ecdf <- ddply(owner_data, .(state), transform, ecdf=ecdf(totalDamage)(totalDamage))
+p <- ggplot(owner_data.ecdf, aes(totalDamage, ecdf, colour = state)) + geom_line()
+View(p)
 ```
 
 
