@@ -1,0 +1,48 @@
+---
+author: "Noreen Mayat"
+title: "project2"
+output: html_document
+date: "2023-09-30"
+---
+
+Make sure to install all packages below before running any code; I installed them by running: 
+```{r}
+# install.packages('package') for each package listed.
+```
+
+Set ur directory. I set mine running this in the console:
+```{r}
+#setwd('Desktop/GitHub/ads-fall2023-project2-group2/doc/')
+```
+
+Load libraries
+```{r load_libraries, warning=FALSE, include=FALSE, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+library(udpipe)
+library(plotly)
+```
+
+Read in data
+```{r}
+pathfile <- '../data/HousingAssistanceOwners.csv'
+owner_data <- read.csv(pathfile)
+
+pathfile_2 <- '../data/HousingAssistanceRenters.csv'
+renter_data <- read.csv(pathfile_2)
+```
+
+```{r}
+# calculate sum of each 
+x1 <- sum(owner_data$approvedBetween1And10000)
+x2 <- sum(owner_data$approvedBetween10001And25000)
+x3 <- sum(owner_data$approvedBetween25001AndMax)
+```
+
+```{r}
+
+```
+
+
+
