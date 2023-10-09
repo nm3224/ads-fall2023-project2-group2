@@ -18,6 +18,7 @@ Set ur directory. I set mine running this in the console:
 Load libraries
 ```{r load_libraries, warning=FALSE, include=FALSE, echo=FALSE}
 library(dplyr)
+library(stats)
 library(ggplot2)
 library(ggrepel)
 library(udpipe)
@@ -32,6 +33,9 @@ owner_data <- read.csv(pathfile)
 
 pathfile_2 <- '../data/HousingAssistanceRenters.csv'
 renter_data <- read.csv(pathfile_2)
+
+pathfile_3 <- '../data/owners_summary_state_groupby.csv'
+state_incident_data <- read.csv(pathfile_3)
 ```
 
 
@@ -76,11 +80,25 @@ pie(slices, labels = lbls, col=rainbow(length(lbls)), main="Pie Chart for Owners
 
 
 ```{r}
-#calculating empirical distribution of total damge/total approved amount based on state
-owner_data.ecdf <- ddply(owner_data, .(state), transform, ecdf=ecdf(totalDamage)(totalDamage))
-p <- ggplot(owner_data.ecdf, aes(totalDamage, ecdf, colour = state)) + geom_line()
-View(p)
+# create data quantiles
+state_incident_data$percentile_damage = rank(state_incident_data$total_damage_sum)/nrow(state_incident_data)*100
+state_incident_data$percentile_amt = rank(state_incident_data$total_approved_amount_sum)/nrow(state_incident_data)*100
+
+# calculating empirical distribution of total damage/total approved amount based on state and incident type
+empirical_dist <- function(df, incident, state, amount, damage){
+  data <- df %>% 
+    filter(incidentType == incident, state == state, percentile_amt <= amount, percentile_damage <= damage)
+    if (dim(data)[1] == 0) {
+    print("No Data")
+    break
+}
+  ecdf_func <- ecdf(data$total_damage_sum)
+  plot(ecdf_func, xlab='Damage', ylab="Approved Amount",  
+     main="Empirical Cumulative Distribution Function Plot for Approved Amounts/Damage")
+}
 ```
+
+
 
 
 
