@@ -4,34 +4,18 @@
 
 Term: Fall 2023
 
-![screenshot](doc/figs/map.jpg)
-
-In this second project of GR5243 Applied Data Science, we develop a *Exploratory Data Analysis and Visualization* shiny app using one of **the OpenFEMA data sets** of your choice. See [Project 2 Description](doc/project2_desc.md) for more details.  
-
-The **learning goals** for this project is:
-
-- business intelligence for data science
-- data cleaning
-- data visualization
-- systems development/design life cycle
-- shiny app/shiny server
-
-*The above general statement about project 2 can be removed once you are finished with your project. It is optional.
-
-Term: Fall 2023
-
 + Team #2
 + **Project title**: + Team members
 	+ Julia Blake
 	+ Noreen Mayat
 	+ Yucheng Lu
 	+ Arnulfo Trevino
-	+ team member 5
- 	+ team member 6
+	+ Yichuan Lin
+ 	+ Jingxuan Wang
 
-+ **Project summary**: In this project we will be doing several deep analysis in the datasets of FEMA in order to investigate and find anything interesting in terms of grants being given out like differences in zip codes and sums, differences between owners and renters with respective sums, divided by states and regions, and many more. 
++ **Project summary**: In this project we will be doing several deep analysis in the datasets of FEMA in order to investigate and analyze trends into aspects of the magnitude of grants awarded and incidents most prevalent within different zip codes and states. Additionally, we will analyze the differences between renters and ownsers with respect to the approved amounts. The goal of this app is to provide the user with a deeper dive into the trends of assistance provided to different groups and regions of the country.
 
-+ **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
++ **Contribution statement**: All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 
