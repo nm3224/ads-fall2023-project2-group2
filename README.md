@@ -1,11 +1,11 @@
 # Project 2: Shiny App Development
 
-### [Project Description](doc/project2_desc.md)
++ **View App Here**:
 
 Term: Fall 2023
 
 + Team #2
-+ **Project title**: + Team members
++ **FEMA Housing Assistance and Incident Types**:
 	+ Julia Blake
 	+ Noreen Mayat
 	+ Yucheng Lu
