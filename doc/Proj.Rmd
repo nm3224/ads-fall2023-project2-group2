@@ -1,0 +1,88 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+#Instalacion de librerias:
+```{r}
+#install.packages("readr")
+#install.packages("ggplot2")
+#install.packages("maps")
+#install.packages("mapdata")
+#install.packages("ggmap")
+#install.packages("plotly")
+```
+#Importacion de librerias:
+```{r}
+library(readr)
+library(ggplot2)
+library(maps)
+library(mapdata)
+library(ggmap)
+library(dplyr)
+```
+#Lectura del primer dataset:
+```{r}
+datos_osz<- read_csv("owners_summary_zip.csv")
+datos_oszgb<- read_csv("owners_summary_state_groupby.csv")
+head(datos_osz)
+head(datos_oszgb)
+```
+# Agrupacion:
+```{r}
+datos_agrupados <- datos_oszgb %>%
+  group_by(state) %>%
+  summarise(total_damage_sum = sum(total_damage_sum))
+```
+
+```{r}
+duplicated(datos_agrupados$state)
+```
+
+#Mapa de calor:
+```{r}
+datos_agrupados <- datos_oszgb %>%
+  group_by(state) %>%
+  summarise(total_damage_sum = sum(total_damage_sum))
+
+
+mapa_calor <- plot_ly(datos_agrupados, 
+                      type = "choropleth",
+                      locations = ~state,
+                      locationmode = "USA-states",
+                      z = ~total_damage_sum,
+                      text = ~paste("Estado: ", state, "<br>Total Damage Sum: ", total_damage_sum),
+                      colorscale = "Viridis",
+                      colorbar = list(title = "Total Damage Sum"))
+mapa_calor
+
+```
+
+```{r}
+datos_usa <- datos_oszgb %>%
+  filter(state %in% state.abb)
+
+datos_agrupados <- datos_usa %>%
+  group_by(state) %>%
+  summarise(total_damage_sum = sum(total_damage_sum))
+
+mapa_calor <- plot_ly(datos_agrupados, 
+                      type = "choropleth",
+                      locations = ~state,
+                      z = ~total_damage_sum,
+                      locationmode = "USA-states",
+                      text = ~paste("Estado: ", state, "<br>Total Damage Sum: ", total_damage_sum),
+                      colorscale = "Viridis",
+                      colorbar = list(title = "Total Damage Sum"))
+
+mapa_calor <- mapa_calor %>%
+  layout(geo = list(scope = "usa"))
+
+mapa_calor
+
+```
+
+
+
+
+
+
