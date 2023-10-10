@@ -11,8 +11,8 @@
   library(RColorBrewer)
   library(data.table)
   library(sf)
+  
 
-  setwd('data')
   
   
   
@@ -20,15 +20,15 @@
   #######
   
   
-  disaster_declaration <- read.csv("FemaWebDisasterDeclarations.csv")
-  regions <- read.csv("US_States_and_Regions.csv")
+  disaster_declaration <- read.csv("data/FemaWebDisasterDeclarations.csv")
+  regions <- read.csv("data/US_States_and_Regions.csv")
   disaster_declaration <- disaster_declaration[,-c(2,5,10:13,18:20)]
   disaster_declaration$stateName <- trimws(disaster_declaration$stateName)
   disaster_declaration <- disaster_declaration[disaster_declaration$stateName %in% c(unique(regions$stateName)), ]
   disaster_declaration$incidentBeginDate <- as.POSIXct(disaster_declaration$incidentBeginDate, format = "%Y-%m-%dT%H:%M:%S.%OS")
   disaster_declaration$year <- year(disaster_declaration$incidentBeginDate)
-  disaster_owner <- read.csv("HousingAssistanceOwners.csv")
-  disaster_renter <- read.csv("HousingAssistanceRenters.csv")
+  disaster_owner <- read.csv("data/HousingAssistanceOwners.csv")
+  disaster_renter <- read.csv("data/HousingAssistanceRenters.csv")
   
   top_incident <- disaster_declaration%>%group_by(year, incidentType)%>%summarize(Frequency=n())%>%arrange(year, desc(Frequency))%>%slice_max(order_by = Frequency, n = 1)
   disaster_declaration_na <- colSums(is.na(disaster_declaration))
@@ -37,7 +37,7 @@
   top_disaster_state <- disaster_declaration%>%group_by(stateName, incidentType)%>%summarize(Frequency=n())%>%arrange(stateName, desc(Frequency))%>%slice_max(order_by = Frequency, n = 1)
   
   
-  state_boundaries <- read_sf("state_boundaries/state_boundaries/cb_2019_us_state_5m.shp")
+  state_boundaries <- read_sf("data/state_boundaries/state_boundaries/cb_2019_us_state_5m.shp")
   state_boundaries <- st_transform(state_boundaries, crs = "+proj=longlat +datum=WGS84")
   merged_data <- merge(state_boundaries, disaster_declaration, by.x = "NAME", by.y = "stateName", all.x = FALSE)
   disaster_freq_state <- disaster_declaration%>%group_by(stateName)%>%summarize(Frequency=n())
@@ -51,7 +51,7 @@
   
   ## draw map
   
-  data <- read.csv("owners_summary_zip.csv")
+  data <- read.csv("data/owners_summary_zip.csv")
   
   summary_data <- data %>%
     group_by(latitude, longitude) %>%
