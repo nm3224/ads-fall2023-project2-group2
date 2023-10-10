@@ -17,6 +17,8 @@ library(plotly)
 library(RColorBrewer)
 library(DT)
 library(data.table)
+library(leaflet)
+library(sf)
 ```
 
 
@@ -24,20 +26,33 @@ library(data.table)
 ```{r collapse=TRUE}
 #Data Pre-processing
 disaster_declaration <- read.csv("C:\\Users\\wangj\\Desktop\\ADS-Project2\\FemaWebDisasterDeclarations.csv")
+regions <- read.csv("C:\\Users\\wangj\\Desktop\\ADS-Project2\\US_States_and_Regions.csv")
 disaster_declaration <- disaster_declaration[,-c(2,5,10:13,18:20)]
+disaster_declaration$stateName <- trimws(disaster_declaration$stateName)
+disaster_declaration <- disaster_declaration[disaster_declaration$stateName %in% c(unique(regions$stateName)), ]
 disaster_declaration$incidentBeginDate <- as.POSIXct(disaster_declaration$incidentBeginDate, format = "%Y-%m-%dT%H:%M:%S.%OS")
 disaster_declaration$year <- year(disaster_declaration$incidentBeginDate)
 disaster_summary <- read.csv("C:\\Users\\wangj\\Desktop\\ADS-Project2\\FemaWebDisasterSummaries.csv")
 disaster_summary <- disaster_summary[,-c(9,10,12:14)]
 disaster_approved <- inner_join(disaster_declaration, disaster_summary, by = "disasterNumber")
+disaster_owner <- read.csv("C:\\Users\\wangj\\Desktop\\ADS-Project2\\HousingAssistanceOwners.csv")
+disaster_renter <- read.csv("C:\\Users\\wangj\\Desktop\\ADS-Project2\\HousingAssistanceRenters.csv")
+
 top_incident <- disaster_declaration%>%group_by(year, incidentType)%>%summarize(Frequency=n())%>%arrange(year, desc(Frequency))%>%slice_max(order_by = Frequency, n = 1)
 disaster_declaration_na <- colSums(is.na(disaster_declaration))
 disaster_summary_na <- colSums(is.na(disaster_summary))
 top_states <- disaster_declaration%>%group_by(year, stateName)%>%summarize(Frequency=n())%>%arrange(year, desc(Frequency))%>%slice_max(order_by = Frequency, n = 1)
-length(setdiff(disaster_declaration$disasterNumber,disaster_summary$disasterNumber))
+#Most prevalent disaster by state
+top_disaster_state <- disaster_declaration%>%group_by(stateName, incidentType)%>%summarize(Frequency=n())%>%arrange(stateName, desc(Frequency))%>%slice_max(order_by = Frequency, n = 1)
 ```
 
-
+```{r}
+#Disaster Frequency by State
+state_boundaries <- read_sf("C:\\Users\\wangj\\Desktop\\ADS-Project2\\cb_2019_us_state_5m.shp")
+state_boundaries <- st_transform(state_boundaries, crs = "+proj=longlat +datum=WGS84")
+merged_data <- merge(state_boundaries, disaster_declaration, by.x = "NAME", by.y = "stateName", all.x = FALSE)
+disaster_freq_state <- disaster_declaration%>%group_by(stateName)%>%summarize(Frequency=n())
+```
 
 ```{r}
 ui <- fluidPage(
@@ -53,11 +68,17 @@ ui <- fluidPage(
 
     mainPanel(
         tabsetPanel(
-          tabPanel("Disaster Declarations",
+          tabPanel("Disaster Frequency by Year",
             plotlyOutput("disasterPlot")
           ),
-          tabPanel("Most Prevalent Disaster",
-            plotlyOutput("prevalent_incident")
+          tabPanel("Disaster Frequency by State",
+            leafletOutput("disasterMap")
+          ),
+          tabPanel("Most Prevalent Disaster by Year",
+            plotlyOutput("prevalent_incident_year")
+          ),
+          tabPanel("Most Prevalent Disaster by State",
+            plotlyOutput("prevalent_incident_state")
           )
         ),
         br(),
@@ -124,7 +145,7 @@ server <- function(input, output) {
     }
   })
     output$incidentPieChart <- renderPlotly({
-      validate(need(values$selected_year, message = "click on a bar to view incident breakdown"))
+      validate(need(values$selected_year, message = "In the disaster frequency by year, click on a bar to view incident breakdown"))
       filtered_data <- disaster_declaration %>%
         filter(year == values$selected_year) %>%
         group_by(incidentType) %>%
@@ -138,8 +159,36 @@ server <- function(input, output) {
                   marker = list(colors = palette)) %>%
         layout(title = paste("Incident Frequency for Year", values$selected_year))
     })
+    
+    output$disasterMap <- renderLeaflet({
+    paletteNum <- colorNumeric('Blues', domain = disaster_freq_state$Frequency)
 
-    output$prevalent_incident <- renderPlotly({
+    leaflet() %>%
+      addProviderTiles(providers$CartoDB.PositronNoLabels) %>%
+      addPolygons(
+        data = merged_data,
+        fillColor = ~paletteNum(disaster_freq_state$Frequency),
+        fillOpacity = 0.7,
+        smoothFactor = 0.3,
+        weight = 1,
+        color = "white",
+        highlightOptions = highlightOptions(
+          weight = 3,
+          color = 'dodgerblue'
+        ),
+        popup = ~paste("State: ", NAME, "<br>Frequency: ", disaster_freq_state$Frequency)
+      ) %>%
+      addLegend(
+        "bottomleft",
+        pal = paletteNum,
+        values = disaster_freq_state$Frequency,
+        title = "Disaster Frequency",
+        opacity = 0.5
+      ) %>%
+      setView(lng = -98.35, lat = 39.5, zoom = 4)
+  })
+
+    output$prevalent_incident_year <- renderPlotly({
       filtered_data <- switch(
       input$year_selector,
       "range" = {
@@ -165,9 +214,25 @@ server <- function(input, output) {
                   legend = list(x = 0.05, y = 1, orientation = "h"))
 
  })
+    
+    output$prevalent_incident_state <- renderPlotly({
+      palette <- brewer.pal(n = n_distinct(top_incident$incidentType), name = "Set2")
+      plot_ly(data = top_disaster_state, height = 400, width = 600) %>%
+        add_trace(x = ~stateName, 
+                  y = ~Frequency, 
+                  type = "bar",
+                  color = ~incidentType, colors = palette,
+                  width = 0.8) %>%
+        layout(title = list(text = "Most Prevalent Disaster by State"),
+                  yaxis = list(title = "Frequency"),
+                  legend = list(x = 0.05, y = 1, orientation = "h"),
+                   xaxis = list(title = "", tickangle = 45))
+
+ })
 }
 
 shinyApp(ui, server)
 
 ```
+
 
