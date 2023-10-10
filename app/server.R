@@ -1,204 +1,241 @@
-#
-# This is the server logic of a Shiny web application. You can run the
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-###############################Install Related Packages #######################
-if (!require("shiny")) {
-    install.packages("shiny")
-    library(shiny)
-}
-if (!require("leaflet")) {
-    install.packages("leaflet")
-    library(leaflet)
-}
-if (!require("leaflet.extras")) {
-    install.packages("leaflet.extras")
-    library(leaflet.extras)
-}
-if (!require("dplyr")) {
-    install.packages("dplyr")
-    library(dplyr)
-}
-if (!require("magrittr")) {
-    install.packages("magrittr")
-    library(magrittr)
-}
-if (!require("mapview")) {
-    install.packages("mapview")
-    library(mapview)
-}
-if (!require("leafsync")) {
-    install.packages("leafsync")
-    library(leafsync)
-}
-
-#Data Processing
-total_citi_bike_df = read.csv('../data/citibike_data.csv')
-##compute the daily in and out difference for the station
-total_citi_bike_df$day_diff = total_citi_bike_df$endcount - total_citi_bike_df$startcount
-#assign each column to weekend or weekday
-total_citi_bike_df$weekend_or_weekday = ifelse(total_citi_bike_df$weekday %in% c('Saturday','Sunday'), "Weekend", "Weekday")
-
-#station info
-citi_bike_station_info <- total_citi_bike_df[,c('station_id','station_name','station_longitude','station_latitude')]
-#remove the duplicates based on station id 
-citi_bike_station_info <- citi_bike_station_info[!duplicated(citi_bike_station_info[ , c("station_id")]),]
-
-#split the bike data to pre-covid and covid time period
-citi_bike_pre_covid_df = total_citi_bike_df[difftime(total_citi_bike_df$date,"2019-05-31")<=0,] #2019-05-01 ~ 2019-05-31
-citi_bike_covid_df = total_citi_bike_df[difftime(total_citi_bike_df$date,"2020-04-30")>=0,] #2020-05-01 ~ 2021-05-31
-
-
-# Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-
-    ## Map Tab section
+  source('global.R')
+  
+  shinyServer(function(input,output){
     
-    output$left_map <- renderLeaflet({
+    # pie chart
     
-    #adjust for weekday/weekend effect
-    if (input$adjust_time =='Overall') {
-        leaflet_plt_df <- citi_bike_pre_covid_df %>% 
-                            group_by(station_id) %>%
-                            summarise(total_start_count = sum(startcount),
-                                      total_end_count = sum(endcount),
-                                      total_day_diff = sum(day_diff),
-                                      total_diff_percentage = sum(day_diff)/sum(startcount),
-                            ) %>% left_join(citi_bike_station_info,by='station_id')
-    } else {
-        leaflet_plt_df <- citi_bike_pre_covid_df %>% 
-                            filter(weekend_or_weekday == input$adjust_time) %>%
-                            group_by(station_id) %>%
-                                summarise(total_start_count = sum(startcount),
-                                          total_end_count = sum(endcount),
-                                          total_day_diff = sum(day_diff),
-                                          total_diff_percentage = sum(day_diff)/sum(startcount),
-                                ) %>% left_join(citi_bike_station_info,by='station_id')
-                            } 
+    output$out_piechart1 <- renderPlotly({
+      filtered_data1 <- generate_summary_data_stat(input$state1, input$incident1, input$percentile1_d, input$percentile1_a)
+      filtered_data_per_1 <- filtered_data1 %>% 
+        mutate(percentage_dam = Total_Damage_Sum/sum(Total_Damage_Sum))
+      pie_chart1 <- plot_ly(
+        filtered_data_per_1,
+        labels = ~IncidentType,
+        values = ~percentage_dam,
+        type = 'pie'
+      ) %>%
+        layout(title = paste("Percentage of Total Damage"),
+               showlegend = TRUE)
+      
+      pie_chart1
+    })
+    
+    output$out_piechart2 <- renderPlotly({
+      filtered_data2 <- generate_summary_data_stat(input$state1, input$incident1, input$percentile1_d, input$percentile1_a)
+      filtered_data_per_2 <- filtered_data2 %>% 
+        mutate(percentage_apamt = Total_Approved_Amount_Sum/sum(Total_Approved_Amount_Sum))
+      pie_chart2 <- plot_ly(
+        filtered_data_per_2,
+        labels = ~IncidentType,
+        values = ~percentage_apamt,
+        type = 'pie'
+      ) %>%
+        layout(title = paste("Percentage of Total Approved Amount"),
+               showlegend = TRUE)
+      
+      pie_chart2
+    })
+    
 
-        
-    map_2019 <- leaflet_plt_df %>%
-         leaflet(options = leafletOptions(minZoom = 11, maxZoom = 13)) %>%
-         addTiles() %>%
-         addProviderTiles("CartoDB.Positron",
-                          options = providerTileOptions(noWrap = TRUE)) %>%
-         setView(-73.9834,40.7504,zoom = 12)
-     
-     if (input$adjust_score == 'start_cnt') {
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_start_count,
-                        max=4000,
-                        radius=8,
-                        blur=10)
-     }else if (input$adjust_score == 'end_cnt') {
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_end_count,
-                        max=4000,
-                        radius=8,
-                        blur=10)
-     } else if (input$adjust_score == 'day_diff_absolute'){
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_day_diff,
-                        max=50,
-                        radius=8,
-                        blur=10)
-         
-     }else if (input$adjust_score == 'day_diff_percentage'){
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_diff_percentage,#change to total day diff percentage
-                        max=0.1,
-                        radius=8,
-                        blur=10)
-         
-     }
-     }) #left map plot
     
-    output$right_map <- renderLeaflet({
-        #adjust for weekday/weekend effect
-        if (input$adjust_time =='Overall') {
-            leaflet_plt_df <- citi_bike_covid_df %>% 
-                group_by(station_id) %>%
-                summarise(total_start_count = sum(startcount),
-                          total_end_count = sum(endcount),
-                          total_day_diff = sum(day_diff),
-                          total_diff_percentage = sum(day_diff)/sum(startcount),
-                ) %>% left_join(citi_bike_station_info,by='station_id')
-        } else {
-            leaflet_plt_df <- citi_bike_covid_df %>% 
-                filter(weekend_or_weekday == input$adjust_time) %>%
-                group_by(station_id) %>%
-                summarise(total_start_count = sum(startcount),
-                          total_end_count = sum(endcount),
-                          total_day_diff = sum(day_diff),
-                          total_diff_percentage = sum(day_diff)/sum(startcount),
-                ) %>% left_join(citi_bike_station_info,by='station_id')
-        } 
-        #initial the map to plot on
-        map_2020 <- leaflet_plt_df %>%
-            leaflet(options = leafletOptions(minZoom = 11, maxZoom = 13)) %>%
-            addTiles() %>%
-            addProviderTiles("CartoDB.Positron",
-                             options = providerTileOptions(noWrap = TRUE)) %>%
-            setView(-73.9834,40.7504,zoom = 12) 
-        
-        if (input$adjust_score == 'start_cnt') {
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                            intensity=~total_start_count, #change to total start count
-                            max=4000,
-                            radius=8,
-                           blur=10)
-        }else if (input$adjust_score == 'end_cnt') {
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                           intensity=~total_end_count,#change to total end count
-                           max=4000,
-                           radius=8,
-                           blur=10)
-        } else if (input$adjust_score == 'day_diff_absolute'){
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                           intensity=~total_day_diff,#change to total day diff
-                           max=50,
-                           radius=8,
-                           blur=10)
-            
-        }else if (input$adjust_score == 'day_diff_percentage'){
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                           intensity=~total_diff_percentage,#change to total day diff percentage
-                           max=0.1,
-                           radius=8,
-                           blur=10)
-            
+    output$out2 <- renderLeaflet({
+      # heat map
+
+      summary_data_result <- generate_summary_data(input$state2, input$incident2)
+
+      leaflet_map_total_damage <- leaflet(summary_data_result) %>%
+        addTiles() %>%
+        addHeatmap(
+          lng = ~longitude,
+          lat = ~latitude,
+          intensity = ~Total_Damage_Sum,
+          radius = 15,
+          blur = 15,
+          max = max(summary_data_result$Total_Damage_Sum),
+          minOpacity = 0.5
+        ) %>%
+        addControl(
+          html = "<h3>Total Damage Heatmap</h3>",
+          position = "topleft"
+        )
+      
+      leaflet_map_total_damage
+    })
+    
+    output$out3 <- renderLeaflet({
+      summary_data_result <- generate_summary_data(input$state2, input$incident2)
+      leaflet_map_total_approved_amount <- leaflet(summary_data_result) %>%
+        addTiles() %>%
+        addHeatmap(
+          lng = ~longitude,
+          lat = ~latitude,
+          intensity = ~Total_Approved_Amount_Sum,
+          radius = 15,
+          blur = 15,
+          max = max(summary_data_result$Total_Approved_Amount_Sum),
+          minOpacity = 0.5
+        ) %>%
+        addControl(
+          html = "<h3>Total Approved Amount Heatmap</h3>",
+          position = "topright"
+        )
+      leaflet_map_total_approved_amount
+    })
+    
+    
+    
+    # Frequency tab
+
+    disaster_frequency <- disaster_declaration %>%
+      group_by(year) %>%
+      summarize(Frequency = n())    
+    output$yearInput <- renderUI({
+      if (input$year_selector == "range") {
+        sliderInput("year_range", "Select Year Range:",
+                    min = min(disaster_frequency$year),
+                    max = max(disaster_frequency$year),
+                    value = c(min(disaster_frequency$year), max(disaster_frequency$year)),
+                    step = 1)
+      } else {
+        selectInput("single_year", "Select Single Year:",
+                    choices = unique(disaster_frequency$year),
+                    selected = max(disaster_frequency$year))
+      }
+    })
+    values <- reactiveValues(selected_year = NULL)
+    output$disasterPlot <- renderPlotly({
+      filtered_data <- switch(
+        input$year_selector,
+        "range" = {
+          selected_year_range <- input$year_range
+          filter(disaster_frequency, year >=   selected_year_range[1] & year <= selected_year_range[2])
+        },
+        "single" = {
+          disaster_frequency$year <- as.character(disaster_frequency$year)
+          filter(disaster_frequency, year == as.character(input$single_year))
         }
-        
-    }) #right map plot
+      )
+      num_years <- length(unique(filtered_data$year))
+      bar_width <- ifelse(num_years > 4, 0.8, 0.2)
+      plot_ly(source = "disaster_freq", height = 400, width = 600)%>%
+        add_trace(data = filtered_data, 
+                  x = ~year, 
+                  y = ~Frequency, 
+                  type = "bar",
+                  marker = list(color = "#cab2d6"),
+                  width = bar_width )%>%
+        layout(title = "Disaster Frequency by Year",
+               yaxis = list(title = "Frequency"))%>%
+        event_register("plotly_click")
+    })
+    
+    observeEvent(event_data(event ="plotly_click", source = "disaster_freq"),{
+      clicked <- event_data(event ="plotly_click", source = "disaster_freq")
+      if(!is.null(clicked)){
+        values$selected_year <- clicked$x
+      }
+    })
+    output$incidentPieChart <- renderPlotly({
+      validate(need(values$selected_year, message = "In the disaster frequency by year, click on a bar to view incident breakdown"))
+      filtered_data <- disaster_declaration %>%
+        filter(year == values$selected_year) %>%
+        group_by(incidentType) %>%
+        summarize(Frequency = n())
+      palette <- brewer.pal(length(filtered_data$incidentType), "Set3")
+      plot_ly(height = 400, width = 600) %>%
+        add_trace(data = filtered_data,
+                  labels = ~incidentType,
+                  values = ~Frequency,
+                  type = "pie",
+                  marker = list(colors = palette)) %>%
+        layout(title = paste("Incident Frequency for Year", values$selected_year))
+    })
+    
+    output$disasterMap <- renderLeaflet({
+      paletteNum <- colorNumeric('Blues', domain = disaster_freq_state$Frequency)
+      
+      leaflet() %>%
+        addProviderTiles(providers$CartoDB.PositronNoLabels) %>%
+        addPolygons(
+          data = merged_data,
+          fillColor = ~paletteNum(disaster_freq_state$Frequency),
+          fillOpacity = 0.7,
+          smoothFactor = 0.3,
+          weight = 1,
+          color = "white",
+          highlightOptions = highlightOptions(
+            weight = 3,
+            color = 'dodgerblue'
+          ),
+          popup = ~paste("State: ", NAME, "<br>Frequency: ", disaster_freq_state$Frequency)
+        ) %>%
+        addLegend(
+          "bottomleft",
+          pal = paletteNum,
+          values = disaster_freq_state$Frequency,
+          title = "Disaster Frequency",
+          opacity = 0.5
+        ) %>%
+        setView(lng = -98.35, lat = 39.5, zoom = 4)
+    })
+    
+    output$prevalent_incident_year <- renderPlotly({
+      filtered_data <- switch(
+        input$year_selector,
+        "range" = {
+          selected_year_range <- input$year_range
+          filter(top_incident, year >=   selected_year_range[1] & year <= selected_year_range[2])
+        },
+        "single" = {
+          top_incident$year <- as.character(top_incident$year)
+          filter(top_incident, year == as.character(input$single_year))
+        }
+      )
+      num_years <- length(unique(filtered_data$year))
+      bar_width <- ifelse(num_years > 4, 0.8, 0.2)
+      palette <- brewer.pal(n = n_distinct(top_incident$incidentType), name = "Set2")
+      plot_ly(data = filtered_data, height = 400, width = 600) %>%
+        add_trace(x = ~year, 
+                  y = ~Frequency, 
+                  type = "bar",
+                  color = ~incidentType, colors = palette,
+                  width = bar_width) %>%
+        layout(title = list(text = "Most Prevalent Disaster by Year"),
+               yaxis = list(title = "Frequency"),
+               legend = list(x = 0.05, y = 1, orientation = "h"))
+      
+    })
+    
+    output$prevalent_incident_state <- renderPlotly({
+      palette <- brewer.pal(n = n_distinct(top_incident$incidentType), name = "Set2")
+      plot_ly(data = top_disaster_state, height = 400, width = 600) %>%
+        add_trace(x = ~stateName, 
+                  y = ~Frequency, 
+                  type = "bar",
+                  color = ~incidentType, colors = palette,
+                  width = 0.8) %>%
+        layout(title = list(text = "Most Prevalent Disaster by State"),
+               yaxis = list(title = "Frequency"),
+               legend = list(x = 0.05, y = 1, orientation = "h"),
+               xaxis = list(title = "", tickangle = 45))
+      
+    })    
+    
 
-})
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
