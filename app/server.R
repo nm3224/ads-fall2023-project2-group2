@@ -4,45 +4,57 @@
     
     # pie chart
     
-    output$out_piechart1 <- renderPlotly({
-      filtered_data1 <- generate_summary_data_stat(input$state1, input$incident1, input$percentile1_d, input$percentile1_a)
-      filtered_data_per_1 <- filtered_data1 %>% 
+    #################################
+    output$out_piechart3 <- renderPlotly({
+      filtered_data3 <- generate_summary_data_stat(input$state2, input$incident2, 0, 0)
+      filtered_data_per_3 <- filtered_data3 %>% 
         mutate(percentage_dam = Total_Damage_Sum/sum(Total_Damage_Sum))
-      pie_chart1 <- plot_ly(
-        filtered_data_per_1,
+      pie_chart3 <- plot_ly(
+        filtered_data_per_3,
         labels = ~IncidentType,
         values = ~percentage_dam,
-        type = 'pie'
+        type = 'pie',
+        textposition = 'inside',
+        textinfo = 'label+percent',
+        hoverinfo = 'text',
+        text = ~percentage_dam,
+        showlegend = FALSE
       ) %>%
-        layout(title = paste("Percentage of Total Damage"),
+        layout(title = paste("Damage"),
                showlegend = TRUE)
       
-      pie_chart1
+      pie_chart3
     })
     
-    output$out_piechart2 <- renderPlotly({
-      filtered_data2 <- generate_summary_data_stat(input$state1, input$incident1, input$percentile1_d, input$percentile1_a)
-      filtered_data_per_2 <- filtered_data2 %>% 
+    output$out_piechart4 <- renderPlotly({
+      filtered_data4 <- generate_summary_data_stat(input$state2, input$incident2, 0, 0)
+      filtered_data_per_4 <- filtered_data4 %>% 
         mutate(percentage_apamt = Total_Approved_Amount_Sum/sum(Total_Approved_Amount_Sum))
-      pie_chart2 <- plot_ly(
-        filtered_data_per_2,
+      pie_chart4 <- plot_ly(
+        filtered_data_per_4,
         labels = ~IncidentType,
         values = ~percentage_apamt,
-        type = 'pie'
+        type = 'pie',
+        textposition = 'inside',
+        textinfo = 'label+percent',
+        hoverinfo = 'text',
+        text = ~percentage_apamt,
+        showlegend = FALSE
       ) %>%
-        layout(title = paste("Percentage of Total Approved Amount"),
+        layout(title = paste("Appamt"),
                showlegend = TRUE)
       
-      pie_chart2
+      pie_chart4
     })
+    ################################
     
-
+    
     
     output$out2 <- renderLeaflet({
       # heat map
-
+      
       summary_data_result <- generate_summary_data(input$state2, input$incident2)
-
+      
       leaflet_map_total_damage <- leaflet(summary_data_result) %>%
         addTiles() %>%
         addHeatmap(
@@ -56,7 +68,7 @@
         ) %>%
         addControl(
           html = "<h3>Total Damage Heatmap</h3>",
-          position = "topleft"
+          position = "topright"
         )
       
       leaflet_map_total_damage
@@ -85,7 +97,7 @@
     
     
     # Frequency tab
-
+    
     disaster_frequency <- disaster_declaration %>%
       group_by(year) %>%
       summarize(Frequency = n())    
@@ -151,32 +163,13 @@
         layout(title = paste("Incident Frequency for Year", values$selected_year))
     })
     
-    output$disasterMap <- renderLeaflet({
-      paletteNum <- colorNumeric('Blues', domain = disaster_freq_state$Frequency)
-      
-      leaflet() %>%
-        addProviderTiles(providers$CartoDB.PositronNoLabels) %>%
-        addPolygons(
-          data = merged_data,
-          fillColor = ~paletteNum(disaster_freq_state$Frequency),
-          fillOpacity = 0.7,
-          smoothFactor = 0.3,
-          weight = 1,
-          color = "white",
-          highlightOptions = highlightOptions(
-            weight = 3,
-            color = 'dodgerblue'
-          ),
-          popup = ~paste("State: ", NAME, "<br>Frequency: ", disaster_freq_state$Frequency)
-        ) %>%
-        addLegend(
-          "bottomleft",
-          pal = paletteNum,
-          values = disaster_freq_state$Frequency,
-          title = "Disaster Frequency",
-          opacity = 0.5
-        ) %>%
-        setView(lng = -98.35, lat = 39.5, zoom = 4)
+    output$disasterMap <- renderPlotly({
+      plot_ly(disaster_freq_state, type = "choropleth", locationmode = "USA-states",
+              z = ~Frequency, locations = ~stateCode,
+              text=disaster_freq_state$stateName,
+              colorscale = "YlGnBu", colorbar = list(title = "Disaster Frequency"))%>%
+        layout(geo = list(scope = "usa",projection=list(type='albers usa'), 
+                          showlakes=TRUE, lakecolor=toRGB('white')))
     })
     
     output$prevalent_incident_year <- renderPlotly({
@@ -219,23 +212,39 @@
                legend = list(x = 0.05, y = 1, orientation = "h"),
                xaxis = list(title = "", tickangle = 45))
       
-    })    
+    })
     
-
+    # Data
+    
+    output$fema_declaration <- renderDataTable(disaster_declaration,
+                                    options = list(pageLength = 10, lengthMenu = list(c(10)))
+    )
+    
+    output$owners_summary <- renderDataTable(disaster_owner,
+                                               options = list(pageLength = 10, lengthMenu = list(c(10)))
+    )
+    
+    output$owners_data <- renderDataTable(data,
+                                             options = list(pageLength = 10, lengthMenu = list(c(10)))
+    )
+    
+    output$renters_data <- renderDataTable(data,
+                                             options = list(disaster_renter = 10, lengthMenu = list(c(10)))
+    )
   })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
