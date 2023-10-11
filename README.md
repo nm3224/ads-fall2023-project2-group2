@@ -17,7 +17,7 @@ Term: Fall 2023
 
 + **Contribution statement**:
 	+ Yichuan created the UI,
-	+ Yucheng made the heat maps, cleanned and combined the dataset together,
+	+ Yucheng made the heat maps, cleanned and combined the dataset of diaster and housing together,
 	+ Julia kicked off EDA to determine the goal for the user and plots to create and created a couple plots,
 	+ Arnulfo, Noreen, and Jingxuan created plots, and Noreen assisted with the Github repo.
 
