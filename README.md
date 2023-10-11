@@ -18,7 +18,7 @@ Term: Fall 2023
 + **Contribution statement**:
 	+ Yichuan created the UI, created server, rewriting code to shinnyApp's format,
 	+ Yucheng made the heat maps, cleanned and combined the dataset of diaster and housing, committed files on github,
-        + Jingxuan selected the dataset for the project, created plots, and designed the UI and server for the 'Frequency' section of the app,
+        +  Jingxuan selected the dataset for the project, created plots, and designed the UI and server for the 'Frequency' section of the app,
 	+ Julia kicked off EDA to determine the goal for the user and plots to create and created a couple plots,
 	+ Arnulfo, Noreen created plots, and Noreen assisted with the Github repo.
 
