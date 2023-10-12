@@ -13,7 +13,11 @@ Term: Fall 2023
 	+ Yichuan Lin
  	+ Jingxuan Wang
 
-+ **Project summary**: In this project, we will be doing several deep analyses in the datasets of FEMA in order to investigate and analyze trends into aspects of the magnitude of grants awarded and incidents most prevalent within different zip codes and states. Additionally, we will analyze the differences between renters and owners with respect to the approved amounts. The goal of this app is to provide the user with a deeper dive into the trends of assistance provided to different groups and regions of the country.
++ **Project summary**:
++ In this project, we will conduct comprehensive analyses on the FEMA datasets to investigate and identify trends in the magnitude of grants awarded and the most prevalent incidents within different zip codes and states.
++ The aim of this project is to understand how disaster frequency and severity across the U.S. influence insurance premiums and to adjust risk factors accordingly.
++ The ultimate goal is to allow insurance companies to easily see which areas are severely and frequently affected by disasters, which areas need to be cautious in distributing insurance products, and which areas are suitable for raising prices.
++ In addition, by comparing government funding data, we can judge that in some states, when government funding is less than the damage caused by disasters, these states often require more insurance to protect their properties.
 
 + **Contribution statement**:
 	+ Yichuan created the UI, created the server, rewritten code to shinnyApp's format,
